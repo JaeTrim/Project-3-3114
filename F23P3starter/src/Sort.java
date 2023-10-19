@@ -59,14 +59,13 @@ public class Sort {
     {
         int iindex = i * 4;
         int jindex = j * 4;
-        for (int n = 0; n < 4; n++)
-        {
-            byte temp = A[i];
-            A[i] = A[j];
-            A[j] = temp;
-            i++;
-            j++;
-        }
+        
+        byte[] tempArray = new byte[4];
+        
+        System.arraycopy(A, iindex, tempArray, 0, 4);
+        System.arraycopy(A, jindex, A, iindex, 4);
+        System.arraycopy(tempArray, 0, A, jindex, 4);
+        
     }
     
 
