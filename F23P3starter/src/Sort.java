@@ -1,3 +1,5 @@
+import java.nio.ByteBuffer;
+
 /**
  * Sort Class that Sorts the Information
  * 
@@ -8,13 +10,13 @@
 
 public class Sort {
 
-    public Sort(BufferPool pool) {
+    public Sort() {
 
     }
 
 
-    public void quicksort(Comparable[] A, int i, int j) { // Quicksort
-        int pivotindex = findpivot(A, i, j); // Pick a pivot
+    public void quicksort(byte[] A, int i, int j) { // Quicksort
+        int pivotindex = findpivot(i, j); // Pick a pivot
         swap(A, pivotindex, j); // Stick pivot at end
         // k will be the first position in the right subarray
         int k = partition(A, i, j - 1, A[j]);
@@ -28,21 +30,21 @@ public class Sort {
     }
 
 
-    public int findpivot(Comparable[] A, int i, int j) {
+    public int findpivot(int i, int j) {
         return (i + j) / 2;
     }
 
 
     public int partition(
-        Comparable[] A,
+        byte[] A,
         int left,
         int right,
-        Comparable pivot) {
+        int pivot) {
         while (left <= right) { // Move bounds inward until they meet
-            while (A[left].compareTo(pivot) < 0) {
+            while (ByteBuffer.wrap(A, left, 2).compareTo(ByteBuffer.wrap(A, pivot, 2)) < 0) {
                 left++;
             }
-            while ((right >= left) && (A[right].compareTo(pivot) >= 0)) {
+            while ((right >= left) && ByteBuffer.wrap(A, left, 2).compareTo(ByteBuffer.wrap(A, pivot, 2)) >= 0) {
                 right--;
             }
             if (right > left) {
@@ -52,6 +54,18 @@ public class Sort {
         return left; // Return first position in right partition
     }
 
+    
+    private static void swap(byte[] A, int i, int j)
+    {
+        for (int n = 0; n < 4; n++)
+        {
+            byte temp = A[i];
+            A[i] = A[j];
+            A[j] = temp;
+            i++;
+            j++;
+        }
+    }
     
 
 }

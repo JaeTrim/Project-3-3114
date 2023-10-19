@@ -16,10 +16,7 @@ public class Buffer {
 
     public void read(RandomAccessFile file) throws IOException {
         file.seek(index);
-        
         file.read(arr, index, 4096);
-        
-
     }
     
     public void write() {
