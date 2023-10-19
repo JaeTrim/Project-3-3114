@@ -57,13 +57,16 @@ public class Quicksort {
     /**
      * @param args
      *      Command line parameters.
-     * @throws IOException 
+     * @throws Exception 
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         // This is the main file for the program.
         Buffer pool = new Buffer(0, new RandomAccessFile("input.txt", "rw"));
         Sort sorter = new Sort();
         sorter.quicksort(pool.getArr(), 0, 1023);
         pool.write(pool.getArr());
+        CheckFile check = new CheckFile();
+        Boolean res = check.checkFile("input.txt");
+        System.out.print(res);
     }
 }
