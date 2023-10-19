@@ -57,6 +57,8 @@ public class Sort {
     
     private static void swap(byte[] A, int i, int j)
     {
+        int iindex = i * 4;
+        int jindex = j * 4;
         for (int n = 0; n < 4; n++)
         {
             byte temp = A[i];

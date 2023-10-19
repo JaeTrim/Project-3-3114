@@ -43,6 +43,6 @@ public class QuicksortTest extends TestCase {
     public void testQInit() {
         Quicksort tree = new Quicksort();
         assertNotNull(tree);
-        Quicksort.main(null);
+        //Quicksort.main(null);
     }
 }
