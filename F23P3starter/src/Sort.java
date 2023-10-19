@@ -8,17 +8,17 @@
 
 public class Sort {
 
-    public Sort() {
+    public Sort(BufferPool pool) {
 
     }
 
 
-    public static void quicksort(Comparable[] A, int i, int j) { // Quicksort
+    public void quicksort(Comparable[] A, int i, int j) { // Quicksort
         int pivotindex = findpivot(A, i, j); // Pick a pivot
-        Swap.swap(A, pivotindex, j); // Stick pivot at end
+        swap(A, pivotindex, j); // Stick pivot at end
         // k will be the first position in the right subarray
         int k = partition(A, i, j - 1, A[j]);
-        Swap.swap(A, k, j); // Put pivot in place
+        swap(A, k, j); // Put pivot in place
         if ((k - i) > 1) {
             quicksort(A, i, k - 1);
         } // Sort left partition
@@ -28,12 +28,12 @@ public class Sort {
     }
 
 
-    public static int findpivot(Comparable[] A, int i, int j) {
+    public int findpivot(Comparable[] A, int i, int j) {
         return (i + j) / 2;
     }
 
 
-    public static int partition(
+    public int partition(
         Comparable[] A,
         int left,
         int right,
@@ -46,9 +46,12 @@ public class Sort {
                 right--;
             }
             if (right > left) {
-                Swap.swap(A, left, right);
+                swap(A, left, right);
             } // Swap out-of-place values
         }
         return left; // Return first position in right partition
     }
+
+    
+
 }

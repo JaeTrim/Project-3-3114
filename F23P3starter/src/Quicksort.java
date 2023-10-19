@@ -2,7 +2,9 @@
  * {Project Description Here}
  */
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 /**
  * The class containing the main method.
@@ -56,8 +58,11 @@ public class Quicksort {
     /**
      * @param args
      *      Command line parameters.
+     * @throws FileNotFoundException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         // This is the main file for the program.
+        BufferPool pool = new BufferPool(new RandomAccessFile("input.txt", "rw"), Integer.parseInt(args[1]));
+        
     }
 }
