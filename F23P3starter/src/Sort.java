@@ -33,13 +33,6 @@ public class Sort {
     public int findpivot(int i, int j) {
         return (i + j) / 2;
     }
-    
-//    public int getShort(byte[] a, int index)
-//    {
-//        ByteBuffer arr = ByteBuffer.wrap(a);
-//        int i = arr.getShort(index * 4);
-//    }
-
 
     public int partition(
         byte[] A,

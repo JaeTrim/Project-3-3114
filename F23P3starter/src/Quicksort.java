@@ -63,7 +63,7 @@ public class Quicksort {
         // This is the main file for the program.
         Buffer pool = new Buffer(0, new RandomAccessFile("input.txt", "rw"));
         Sort sorter = new Sort();
-        sorter.quicksort(pool.getArr(), 0, 1023);
+        sorter.quicksort(pool.getArr(), 0, pool.getArr().length / 4 - 1);
         pool.write(pool.getArr());
         CheckFile check = new CheckFile();
         Boolean res = check.checkFile("input.txt");

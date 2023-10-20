@@ -27,7 +27,7 @@ public class Buffer {
     public Buffer(int index, RandomAccessFile file) throws IOException {
         this.file = file;
         this.index = index;
-        arr = new byte[4096];
+        arr = new byte[(int)file.length()];
         read();
     }
 
