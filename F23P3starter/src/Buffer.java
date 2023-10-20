@@ -39,7 +39,7 @@ public class Buffer {
      */
     public void read() throws IOException {
         file.seek(index);
-        file.read(arr, index, 4096);
+        file.read(arr, index, (int)file.length());
     }
 
 
@@ -47,6 +47,7 @@ public class Buffer {
      * Writes the buffer
      * 
      * @param newArr
+     *            for new byte array that will be written to old
      * @throws IOException
      */
     public void write(byte[] newArr) throws IOException {
@@ -68,9 +69,9 @@ public class Buffer {
 
 
     /**
-     * Gets the dirty byte
+     * Gets the dirty byte value
      * 
-     * @return
+     * @return the dirty byte value
      */
     public int getDirty() {
         return dirty;
@@ -81,6 +82,7 @@ public class Buffer {
      * Sets the dirty byte
      * 
      * @param val
+     *            for new value
      */
     public void setDirty(int val) {
         dirty = val;

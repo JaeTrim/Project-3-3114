@@ -10,62 +10,93 @@ import java.nio.ByteBuffer;
 
 public class Sort {
 
+    /**
+     * Sort Constructor
+     */
     public Sort() {
 
     }
 
 
-    public void quicksort(byte[] A, int i, int j) { // Quicksort
+    /**
+     * Quicksort function
+     * 
+     * @param a
+     *            for byte array passed through
+     * @param i
+     *            first index
+     * @param j
+     *            second index
+     */
+    public void quicksort(byte[] a, int i, int j) { // Quicksort
         int pivotindex = findpivot(i, j); // Pick a pivot
-        swap(A, pivotindex, j); // Stick pivot at end
+        swap(a, pivotindex, j); // Stick pivot at end
         // k will be the first position in the right subarray
-        int k = partition(A, i, j - 1, ByteBuffer.wrap(A, j * 4, 2));
-        swap(A, k, j); // Put pivot in place
+        int k = partition(a, i, j - 1, ByteBuffer.wrap(a, j * 4, 2));
+        swap(a, k, j); // Put pivot in place
         if ((k - i) > 1) {
-            quicksort(A, i, k - 1);
+            quicksort(a, i, k - 1);
         } // Sort left partition
         if ((j - k) > 1) {
-            quicksort(A, k + 1, j);
+            quicksort(a, k + 1, j);
         } // Sort right partition
     }
 
 
+    /**
+     * Finds the pivot based on two indexes
+     * 
+     * @param i
+     *            first index
+     * @param j
+     *            second index
+     * @return the middle index
+     */
     public int findpivot(int i, int j) {
         return (i + j) / 2;
     }
 
-    public int partition(
-        byte[] A,
-        int left,
-        int right,
-        ByteBuffer pivot) {
+
+    /**
+     * Partition Function
+     * 
+     * @param a
+     *            byte array passed through
+     * @param left
+     *            is left partition from pivot
+     * @param right
+     *            is right partition from pivot
+     * @param pivot
+     *            is pivot value
+     * @return the first position in the right partition
+     */
+    public int partition(byte[] a, int left, int right, ByteBuffer pivot) {
         while (left <= right) { // Move bounds inward until they meet
-            while (ByteBuffer.wrap(A, left * 4, 2).compareTo(pivot) < 0) {
+            while (ByteBuffer.wrap(a, left * 4, 2).compareTo(pivot) < 0) {
                 left++;
             }
-            while ((right >= left) && ByteBuffer.wrap(A, right * 4, 2).compareTo(pivot) >= 0) {
+            while ((right >= left) && ByteBuffer.wrap(a, right * 4, 2)
+                .compareTo(pivot) >= 0) {
                 right--;
             }
             if (right > left) {
-                swap(A, left, right);
+                swap(a, left, right);
             } // Swap out-of-place values
         }
         return left; // Return first position in right partition
     }
 
-    
-    private static void swap(byte[] A, int i, int j)
-    {
+
+    private static void swap(byte[] a, int i, int j) {
         int iindex = i * 4;
         int jindex = j * 4;
-        
+
         byte[] tempArray = new byte[4];
-        
-        System.arraycopy(A, iindex, tempArray, 0, 4);
-        System.arraycopy(A, jindex, A, iindex, 4);
-        System.arraycopy(tempArray, 0, A, jindex, 4);
-        
+
+        System.arraycopy(a, iindex, tempArray, 0, 4);
+        System.arraycopy(a, jindex, a, iindex, 4);
+        System.arraycopy(tempArray, 0, a, jindex, 4);
+
     }
-    
 
 }

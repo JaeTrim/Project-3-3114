@@ -61,7 +61,7 @@ public class Quicksort {
      */
     public static void main(String[] args) throws Exception {
         // This is the main file for the program.
-        Buffer pool = new Buffer(0, new RandomAccessFile("input.txt", "rw"));
+        Buffer pool = new Buffer(0, new RandomAccessFile(args[0], "rw"));
         Sort sorter = new Sort();
         sorter.quicksort(pool.getArr(), 0, pool.getArr().length / 4 - 1);
         pool.write(pool.getArr());
