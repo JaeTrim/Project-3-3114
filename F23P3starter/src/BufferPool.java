@@ -1,4 +1,4 @@
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 
 /**
@@ -19,12 +19,19 @@ public class BufferPool {
      *            for input file
      * @param numOfBuffers
      *            is num of buffers
-     * @throws FileNotFoundException
+     * @throws IOException 
      */
     public BufferPool(RandomAccessFile file, int numOfBuffers)
-        throws FileNotFoundException {
+        throws IOException {
         arr = new Buffer[numOfBuffers];
+        for (int i = 0; i < numOfBuffers; i++) {
+            arr[i] = new Buffer(i * 4096, file);
+        }
 
+    }
+    
+    public void read() {
+        
     }
 
 }

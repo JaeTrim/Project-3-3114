@@ -32,13 +32,14 @@ public class Sort {
         int pivotindex = findpivot(i, j); // Pick a pivot
         swap(a, pivotindex, j); // Stick pivot at end
         // k will be the first position in the right subarray
-        int k = partition(a, i, j - 1, ByteBuffer.wrap(a, j * 4, 2));
+        int k = partition(a, i, j - 1, getShort(a, j * 4, 2));
         swap(a, k, j); // Put pivot in place
         if ((k - i) > 1) {
             quicksort(a, i, k - 1);
         } // Sort left partition
         if ((j - k) > 1) {
             quicksort(a, k + 1, j);
+
         } // Sort right partition
     }
 
@@ -57,6 +58,12 @@ public class Sort {
     }
 
 
+    public Short getShort(byte[] a, int i, int j) {
+        Short res = ByteBuffer.wrap(a, i, j).getShort();
+        return res;
+    }
+
+
     /**
      * Partition Function
      * 
@@ -70,13 +77,13 @@ public class Sort {
      *            is pivot value
      * @return the first position in the right partition
      */
-    public int partition(byte[] a, int left, int right, ByteBuffer pivot) {
+    public int partition(byte[] a, int left, int right, Short pivot) {
         while (left <= right) { // Move bounds inward until they meet
-            while (ByteBuffer.wrap(a, left * 4, 2).compareTo(pivot) < 0) {
+            while (getShort(a, left * 4, 2).compareTo(pivot) < 0) {
                 left++;
             }
-            while ((right >= left) && ByteBuffer.wrap(a, right * 4, 2)
-                .compareTo(pivot) >= 0) {
+            while ((right >= left) && getShort(a, right * 4, 2).compareTo(
+                pivot) >= 0) {
                 right--;
             }
             if (right > left) {
