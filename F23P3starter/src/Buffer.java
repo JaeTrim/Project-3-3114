@@ -14,6 +14,7 @@ public class Buffer {
     private int dirty;
     private byte[] arr;
     private RandomAccessFile file;
+    //private static final int BLOCKSIZE = 4096;
 
     /**
      * Buffer Constuctor
@@ -27,7 +28,8 @@ public class Buffer {
     public Buffer(int index, RandomAccessFile file) throws IOException {
         this.file = file;
         this.index = index;
-        arr = new byte[(int)file.length()];
+        arr = new byte[4096];
+        dirty = 0;
         read();
     }
 
@@ -39,7 +41,8 @@ public class Buffer {
      */
     public void read() throws IOException {
         file.seek(index);
-        file.read(arr, index, (int)file.length());
+        file.read(arr);
+        //file.read(arr, index, BLOCKSIZE);
     }
 
 
@@ -50,11 +53,9 @@ public class Buffer {
      *            for new byte array that will be written to old
      * @throws IOException
      */
-    public void write(byte[] newArr) throws IOException {
+    public void write() throws IOException {
         file.seek(index);
-        file.write(newArr);
-        setDirty(1);
-        arr = newArr;
+        file.write(arr);
     }
 
 
@@ -86,6 +87,22 @@ public class Buffer {
      */
     public void setDirty(int val) {
         dirty = val;
+    }
+    
+    /**
+     * Gets the buffer's index value
+     * 
+     * return int
+     *            Index
+     */
+    public int getIndex()
+    {
+        return index;
+    }
+    
+    public void setArr(byte[] a)
+    {
+        arr = a;
     }
 
 }

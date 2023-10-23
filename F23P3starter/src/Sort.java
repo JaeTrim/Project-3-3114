@@ -1,4 +1,5 @@
-import java.nio.ByteBuffer;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 /**
  * Sort Class that Sorts the Information
@@ -9,12 +10,19 @@ import java.nio.ByteBuffer;
  */
 
 public class Sort {
+    
+    //private int numOfBuffers;
+    private BufferPool pool;
 
     /**
      * Sort Constructor
+     * @throws IOException 
      */
-    public Sort() {
-
+    public Sort(RandomAccessFile file, int numOfBuffers) throws IOException {
+        //this.numOfBuffers = numOfBuffers;
+        pool = new BufferPool(file, numOfBuffers);
+        quicksort(0, (int)((file.length() / 4) - 1));
+        pool.write();
     }
 
 
@@ -27,20 +35,32 @@ public class Sort {
      *            first index
      * @param j
      *            second index
+     * @throws IOException 
      */
-    public void quicksort(byte[] a, int i, int j) { // Quicksort
+    public void quicksort(int i, int j) throws IOException { // Quicksort
         int pivotindex = findpivot(i, j); // Pick a pivot
-        swap(a, pivotindex, j); // Stick pivot at end
+        pool.swap(pivotindex, j); // Stick pivot at end
         // k will be the first position in the right subarray
-        int k = partition(a, i, j - 1, getShort(a, j * 4, 2));
-        swap(a, k, j); // Put pivot in place
+        int k = partition(i, j - 1, pool.getShort(j));
+        pool.swap(k, j); // Put pivot in place
         if ((k - i) > 1) {
-            quicksort(a, i, k - 1);
+            quicksort(i, k - 1);
         } // Sort left partition
         if ((j - k) > 1) {
-            quicksort(a, k + 1, j);
+            quicksort(k + 1, j);
 
         } // Sort right partition
+        
+//        if (i < j)
+//        {
+//            int p = findpivot(i, j);
+//            short pivot = pool.getShort(p, 2);
+//            int left = partition(i, j, pivot);
+//            int right = left;
+//            //, right := partition(A, p, lo, hi)  // note: multiple return values
+//            quicksort(i, left - 1);
+//            quicksort(right + 1, j);
+//        }
     }
 
 
@@ -58,10 +78,10 @@ public class Sort {
     }
 
 
-    public Short getShort(byte[] a, int i, int j) {
-        Short res = ByteBuffer.wrap(a, i, j).getShort();
-        return res;
-    }
+//    public Short getShort(byte[] a, int i, int j) {
+//        Short res = ByteBuffer.wrap(a, i, j).getShort();
+//        return res;
+//    }
 
 
     /**
@@ -76,34 +96,36 @@ public class Sort {
      * @param pivot
      *            is pivot value
      * @return the first position in the right partition
+     * @throws IOException 
      */
-    public int partition(byte[] a, int left, int right, Short pivot) {
+    public int partition(int left, int right, Short pivot) throws IOException {
         while (left <= right) { // Move bounds inward until they meet
-            while (getShort(a, left * 4, 2).compareTo(pivot) < 0) {
+            while (pool.getShort(left).compareTo(pivot) < 0) {
                 left++;
             }
-            while ((right >= left) && getShort(a, right * 4, 2).compareTo(
+            while ((right >= left) && pool.getShort(right).compareTo(
                 pivot) >= 0) {
                 right--;
             }
             if (right > left) {
-                swap(a, left, right);
+                pool.swap(left, right);
             } // Swap out-of-place values
         }
         return left; // Return first position in right partition
     }
 
 
-    private static void swap(byte[] a, int i, int j) {
-        int iindex = i * 4;
-        int jindex = j * 4;
+//    private static void swap(byte[] a, int i, int j) {
+//        int iindex = i * 4;
+//        int jindex = j * 4;
+//
+//        byte[] tempArray = new byte[4];
+//
+//        System.arraycopy(a, iindex, tempArray, 0, 4);
+//        System.arraycopy(a, jindex, a, iindex, 4);
+//        System.arraycopy(tempArray, 0, a, jindex, 4);
+//
+//    }
 
-        byte[] tempArray = new byte[4];
-
-        System.arraycopy(a, iindex, tempArray, 0, 4);
-        System.arraycopy(a, jindex, a, iindex, 4);
-        System.arraycopy(tempArray, 0, a, jindex, 4);
-
-    }
 
 }
