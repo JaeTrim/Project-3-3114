@@ -30,20 +30,21 @@ public class Buffer {
         this.index = index;
         arr = new byte[4096];
         dirty = 0;
-        read();
-    }
-
-
-    /**
-     * Reads the buffer
-     * 
-     * @throws IOException
-     */
-    public void read() throws IOException {
         file.seek(index);
         file.read(arr);
-        //file.read(arr, index, BLOCKSIZE);
     }
+
+
+//    /**
+//     * Reads the buffer
+//     * 
+//     * @throws IOException
+//     */
+//    public void read() throws IOException {
+//        file.seek(index);
+//        file.read(arr);
+//        //file.read(arr, index, BLOCKSIZE);
+//    }
 
 
     /**
@@ -98,11 +99,6 @@ public class Buffer {
     public int getIndex()
     {
         return index;
-    }
-    
-    public void setArr(byte[] a)
-    {
-        arr = a;
     }
 
 }

@@ -60,7 +60,7 @@ public class BufferPool {
         iBuf.getArr()[iindex + 1] = jBuf.getArr()[jindex + 1];
         iBuf.setDirty(1);
         
-        //jBuf = getBuffer(j);
+        jBuf = getBuffer(j);
         jBuf.getArr()[jindex] = temp0;
         jBuf.getArr()[jindex + 1] = temp1;
        
@@ -73,16 +73,15 @@ public class BufferPool {
     public Short getShort(int index) throws IOException {
         Buffer buf = getBuffer(index);
         int arrIndex = index * 4 - buf.getIndex();
-        Short res = ByteBuffer.wrap(buf.getArr(), arrIndex, 2).getShort();
-        return res;
+        return ByteBuffer.wrap(buf.getArr(), arrIndex, 2).getShort();
     }
 
 
     public void write() throws IOException {
         for (int i = 0; i < arr.length; i++) {
-            Buffer buffer = arr[i];
-            if (buffer != null && buffer.getDirty() == 1) {
-                buffer.write();
+            //Buffer buffer = arr[i];
+            if (arr[i] != null && arr[i].getDirty() == 1) {
+                arr[i].write();
             }
         }
     }
