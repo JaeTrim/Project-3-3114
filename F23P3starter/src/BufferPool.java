@@ -14,7 +14,6 @@ public class BufferPool {
     private int numOfBuffers;
     private Buffer[] arr;
     private RandomAccessFile file;
-    private int blockSize;
 
     /**
      * Buffer Pool Constructor
@@ -30,17 +29,22 @@ public class BufferPool {
         this.numOfBuffers = numOfBuffers;
         this.file = file;
         arr = new Buffer[numOfBuffers];
-        blockSize = 4096;
     }
 
 
     public void swap(int i, int j) throws IOException {
-        Buffer iBuf = getBuffer(i);
+        
         Buffer jBuf = getBuffer(j);
-        int iindex = i * 4 - iBuf.getIndex();
         int jindex = j * 4 - jBuf.getIndex();
-        byte[] iArr = iBuf.getArr();
-        byte[] jArr = jBuf.getArr();
+        
+        Buffer iBuf = getBuffer(i);
+        int iindex = i * 4 - iBuf.getIndex();
+        
+        //byte[] iArr = iBuf.getArr();
+        
+//        Buffer jBuf = getBuffer(j);
+//        int jindex = j * 4 - jBuf.getIndex();
+        //byte[] jArr = jBuf.getArr();
         // byte[] tempArray = new byte[4];
 
         // System.arraycopy(iArr, iindex, tempArray, 0, 4);
@@ -48,16 +52,20 @@ public class BufferPool {
         // System.arraycopy(tempArray, 0, jArr, jindex, 4);
         // jBuf.setDirty(1);
 
-        byte temp0 = iArr[iindex];
-        byte temp1 = iArr[iindex + 1];
+        byte temp0 = iBuf.getArr()[iindex];
+        byte temp1 = iBuf.getArr()[iindex + 1];
+        
 
-        iArr[iindex] = jArr[jindex];
-        iArr[iindex + 1] = jArr[jindex + 1];
-
-        jArr[jindex] = temp0;
-        jArr[jindex + 1] = temp1;
-
+        iBuf.getArr()[iindex] = jBuf.getArr()[jindex];
+        iBuf.getArr()[iindex + 1] = jBuf.getArr()[jindex + 1];
         iBuf.setDirty(1);
+        
+        //jBuf = getBuffer(j);
+        jBuf.getArr()[jindex] = temp0;
+        jBuf.getArr()[jindex + 1] = temp1;
+       
+
+        //iBuf.setDirty(1);
         jBuf.setDirty(1);
     }
 
@@ -81,7 +89,7 @@ public class BufferPool {
 
 
     private Buffer getBuffer(int index) throws IOException {
-        int block = (index / (blockSize / 4)) * blockSize;
+        int block = (index / (1024)) * 4096;
         int blockCheck = inPool(block);
 
         if ((arr[numOfBuffers - 1] != null) && blockCheck == -1) {
