@@ -89,7 +89,7 @@ public class BufferPool {
 
     public void write() throws IOException {
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i].getDirty() == 1) {
+            if (arr[i] != null && arr[i].getDirty() == 1) {
                 arr[i].write();
             }
         }
