@@ -61,13 +61,14 @@ public class Quicksort {
      */
     public static void main(String[] args) throws Exception {
         // This is the main file for the program.
-        generateFile("input.txt", "1", 'b');
+        generateFile("input.txt", "1000", 'b');
         //BufferPool pool = new BufferPool(new RandomAccessFile(args[0], "rw"), Integer.parseInt(args[1]));
-        Sort sorter = new Sort(new RandomAccessFile(args[0], "rw"), Integer.parseInt(args[1]));
+        new Sort(new RandomAccessFile(args[0], "rw"), Integer.parseInt(args[1]));
         //sorter.quicksort(pool.getArr(), 0, pool.getArr().length / 4 - 1);
         //pool.write(pool.getArr());
         CheckFile check = new CheckFile();
         Boolean res = check.checkFile("input.txt");
-        System.out.print(res);
+        System.out.println(res);
+        
     }
 }

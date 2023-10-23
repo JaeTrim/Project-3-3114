@@ -31,69 +31,54 @@ public class BufferPool {
         this.file = file;
         arr = new Buffer[numOfBuffers];
         blockSize = 4096;
-// Sort sorter = new Sort((int)(file.length() / 4));
-// for (int i = 0; i < numOfBuffers; i++) {
-// arr[i] = new Buffer(i * 4096, file);
-// }
     }
 
 
     public void swap(int i, int j) throws IOException {
-        // record index
-//        byte[] tempArray = new byte[4];
-//        
-//        //Buffer iBuf = getBuffer(i);
-//        int iindex = i * 4 - ((i / (blockSize / 4)) * blockSize);
-//        System.arraycopy(getBuffer(i).getArr(), iindex, tempArray, 0, 4);
-//        
-//        
-//        //Buffer jBuf = getBuffer(j);
-//        int jindex = j * 4 - ((j / (blockSize / 4)) * blockSize);
-//        System.arraycopy(getBuffer(j).getArr(), jindex, getBuffer(i).getArr(), iindex, 4);
-//        getBuffer(i).setDirty(1);
-//        
-//        System.arraycopy(tempArray, 0, getBuffer(j).getArr(), jindex, 4);
-//        getBuffer(j).setDirty(1);
-        
         Buffer iBuf = getBuffer(i);
         Buffer jBuf = getBuffer(j);
         int iindex = i * 4 - iBuf.getIndex();
         int jindex = j * 4 - jBuf.getIndex();
         byte[] iArr = iBuf.getArr();
-        //byte[] jArr = jBuf.getArr();
-        byte[] tempArray = new byte[4];
+        byte[] jArr = jBuf.getArr();
+        // byte[] tempArray = new byte[4];
 
-        System.arraycopy(iArr, iindex, tempArray, 0, 4);
-        System.arraycopy(jBuf.getArr(), jindex, iArr, iindex, 4);
-        System.arraycopy(tempArray, 0, jBuf.getArr(), jindex, 4);
-        jBuf.setDirty(1);
-        
-        iBuf = getBuffer(i);
+        // System.arraycopy(iArr, iindex, tempArray, 0, 4);
+        // System.arraycopy(jArr, jindex, iArr, iindex, 4);
+        // System.arraycopy(tempArray, 0, jArr, jindex, 4);
+        // jBuf.setDirty(1);
+
+        byte temp0 = iArr[iindex];
+        byte temp1 = iArr[iindex + 1];
+
+        iArr[iindex] = jArr[jindex];
+        iArr[iindex + 1] = jArr[jindex + 1];
+
+        jArr[jindex] = temp0;
+        jArr[jindex + 1] = temp1;
+
         iBuf.setDirty(1);
-        iBuf.setArr(iArr);
-        
-        //jBuf = getBuffer(j);
-        //jBuf.setDirty(1);
-        //jBuf.setArr(jArr);
+        jBuf.setDirty(1);
     }
 
 
     public Short getShort(int index) throws IOException {
         Buffer buf = getBuffer(index);
         int arrIndex = index * 4 - buf.getIndex();
-        Short res = ByteBuffer.wrap(buf.getArr(), arrIndex,
-            2).getShort();
+        Short res = ByteBuffer.wrap(buf.getArr(), arrIndex, 2).getShort();
         return res;
     }
 
 
     public void write() throws IOException {
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] != null && arr[i].getDirty() == 1) {
-                arr[i].write();
+            Buffer buffer = arr[i];
+            if (buffer != null && buffer.getDirty() == 1) {
+                buffer.write();
             }
         }
     }
+
 
     private Buffer getBuffer(int index) throws IOException {
         int block = (index / (blockSize / 4)) * blockSize;
@@ -103,8 +88,9 @@ public class BufferPool {
             if (arr[numOfBuffers - 1].getDirty() == 1) {
                 arr[numOfBuffers - 1].write();
             }
+
         }
-        
+
         if (blockCheck == -1) {
             Buffer buf = new Buffer(block, file);
             shift(numOfBuffers - 1);
