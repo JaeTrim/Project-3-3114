@@ -17,10 +17,13 @@ public class Sort {
     /**
      * Sort Constructor
      * 
+     * @param file
+     *            is file passed through that will be read and written to
+     * @param numOfBuffers
+     *            is the number of buffers
      * @throws IOException
      */
     public Sort(RandomAccessFile file, int numOfBuffers) throws IOException {
-        // this.numOfBuffers = numOfBuffers;
         pool = new BufferPool(file, numOfBuffers);
         quicksort(0, (int)((file.length() / 4) - 1));
         pool.write();
@@ -48,24 +51,29 @@ public class Sort {
     /**
      * Partition Function
      * 
-     * @param left
+     * @param i
      *            is left partition from pivot
-     * @param right
+     * @param j
      *            is right partition from pivot
      * @return the first position in the right partition
      * @throws IOException
      */
     public int partition(int i, int j) throws IOException {
-        Short pivot = pool.getShort(j);
         int left = i - 1;
         int right = j;
+        Short pivotValue = pool.getShort(j);
         while (true) {
-            while (pool.getShort(++left) < pivot) {          
+            Short leftValue = pool.getShort(++left);
+            while (leftValue < pivotValue) {
+                leftValue = pool.getShort(++left);
             }
-            while (right > i && pool.getShort(--right) > pivot) {               
+            Short rightValue = pool.getShort(--right);
+            while (right > i && rightValue > pivotValue) {
+                rightValue = pool.getShort(--right);
             }
-            if (left >= right)
+            if (left >= right) {
                 break;
+            }
             pool.swap(left, right);
         }
         pool.swap(left, j);

@@ -1,3 +1,4 @@
+
 /**
  * {Project Description Here}
  */
@@ -8,8 +9,9 @@ import java.io.RandomAccessFile;
 /**
  * The class containing the main method.
  *
- * @author {Your Name Here}
- * @version {Put Something Here}
+ * @author Jae Trimboli (jaetrim)
+ * @author Mohammad Mian (mohamamdm21)
+ * @version 2023-10-23
  */
 
 // On my honor:
@@ -38,13 +40,20 @@ public class Quicksort {
      * This method is used to generate a file of a certain size, containing a
      * specified number of records.
      *
-     * @param filename the name of the file to create/write to
-     * @param blockSize the size of the file to generate
-     * @param format the format of file to create
-     * @throws IOException throw if the file is not open and proper
+     * @param filename
+     *            the name of the file to create/write to
+     * @param blockSize
+     *            the size of the file to generate
+     * @param format
+     *            the format of file to create
+     * @throws IOException
+     *             throw if the file is not open and proper
      */
-    public static void generateFile(String filename, String blockSize,
-        char format) throws IOException {
+    public static void generateFile(
+        String filename,
+        String blockSize,
+        char format)
+        throws IOException {
         FileGenerator generator = new FileGenerator();
         String[] inputs = new String[3];
         inputs[0] = "-" + format;
@@ -56,19 +65,16 @@ public class Quicksort {
 
     /**
      * @param args
-     *      Command line parameters.
-     * @throws Exception 
+     *            Command line parameters.
+     * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        // This is the main file for the program.
-        generateFile("input.txt", "10", 'a');
-        //BufferPool pool = new BufferPool(new RandomAccessFile(args[0], "rw"), Integer.parseInt(args[1]));
-        new Sort(new RandomAccessFile(args[0], "rw"), Integer.parseInt(args[1]));
-        //sorter.quicksort(pool.getArr(), 0, pool.getArr().length / 4 - 1);
-        //pool.write(pool.getArr());
-        CheckFile check = new CheckFile();
-        Boolean res = check.checkFile("input.txt");
-        System.out.println(res);
-        
+        generateFile("input.txt", "1", 'a');
+        new Sort(new RandomAccessFile(args[0], "rw"), Integer.parseInt(
+            args[1]));
+        // CheckFile check = new CheckFile();
+        // Boolean res = check.checkFile("input.txt");
+        // System.out.println(res);
+
     }
 }
